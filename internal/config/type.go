@@ -1,6 +1,8 @@
 package config
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // HTTPType http 配置信息
 type HTTPType struct {
@@ -67,6 +69,36 @@ type LogFileHookType struct {
 	Compress   bool   `yaml:"Compress"`
 }
 
+// JWTType 文件归档钩子配置
+type JWTType struct {
+	Enable  bool   `yaml:"Enable"`
+	Secret  string `yaml:"Secret"`
+	Expires int    `yaml:"Expires"`
+	Issuer  string `yaml:"Issuer"`
+}
+
+type OSSType struct {
+	CRC             bool   `yaml:"CRC"`
+	Endpoint        string `yaml:"Endpoint"`
+	AccessKeyId     string `yaml:"AccessKeyId"`
+	AccessKeySecret string `yaml:"AccessKeySecret"`
+}
+
+type OCRType struct {
+	GrantType    string `yaml:"GrantType"`
+	ClientID     string `yaml:"ClientID"`
+	ClientSecret string `yaml:"ClientSecret"`
+}
+
+func (o *OCRType) TokenUrl() string {
+	return fmt.Sprintf(
+		"https://aip.baidubce.com/oauth/2.0/token?grant_type=%s&client_id=%s&client_secret=%s",
+		o.GrantType,
+		o.ClientID,
+		o.ClientSecret,
+	)
+}
+
 // CType 配置文件类型定义
 type CType struct {
 	Mode        string          `yaml:"Mode"`
@@ -76,4 +108,7 @@ type CType struct {
 	DB          DBType          `yaml:"DB"`
 	Log         LogType         `yaml:"Log"`
 	LogFileHook LogFileHookType `yaml:"LogFileHook"`
+	JWT         JWTType         `yaml:"JWT"`
+	OSS         OSSType         `yaml:"OSS"`
+	OCR         OCRType         `yaml:"OCR"`
 }

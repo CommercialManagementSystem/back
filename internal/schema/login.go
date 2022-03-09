@@ -10,4 +10,5 @@ type LoginReqBodySchema struct {
 type LoginResBodySchema struct {
 	UID       string `json:"uid"`
 	Authority int    `json:"authority"`
+	Token     string `json:"token"`
 }

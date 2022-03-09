@@ -29,8 +29,50 @@ func BuildInjector() (*Injector, func(), error) {
 	login := &controller.Login{
 		LoginModel: loginModel,
 	}
+	userModel := &model.UserModel{
+		UserDao: userDao,
+	}
+	userController := &controller.UserController{
+		UserModel: userModel,
+	}
+	productDao := &dao.ProductDao{
+		DB: db,
+	}
+	productModel := &model.ProductModel{
+		ProductDao: productDao,
+	}
+	productController := &controller.ProductController{
+		ProductModel: productModel,
+	}
+	productUserDao := &dao.ProductUserDao{
+		DB: db,
+	}
+	productUserModel := &model.ProductUserModel{
+		ProductUserDao: productUserDao,
+	}
+	productUserController := &controller.ProductUserController{
+		ProductUserModel: productUserModel,
+	}
+	client, err := InitOSS()
+	if err != nil {
+		return nil, nil, err
+	}
+	productAppendixDao := &dao.ProductAppendixDao{
+		DB: db,
+	}
+	productAppendixModel := &model.ProductAppendixModel{
+		OSSClient:          client,
+		ProductAppendixDao: productAppendixDao,
+	}
+	appendixController := &controller.AppendixController{
+		AppendixModel: productAppendixModel,
+	}
 	routerRouter := &router.Router{
-		LoginAPI: login,
+		LoginAPI:           login,
+		UserAPI:            userController,
+		ProductAPI:         productController,
+		ProductUserAPI:     productUserController,
+		ProductAppendixAPI: appendixController,
 	}
 	engine := InitGinEngine(routerRouter)
 	injector := &Injector{

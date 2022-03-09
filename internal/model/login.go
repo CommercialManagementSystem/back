@@ -3,14 +3,10 @@ package model
 import (
 	"context"
 	"errors"
-	"regexp"
-
-	"github.com/CommercialManagementSystem/back/internal/entity"
-
+	"github.com/CommercialManagementSystem/back/internal/config"
 	"github.com/CommercialManagementSystem/back/internal/dao"
 	"github.com/CommercialManagementSystem/back/internal/schema"
 	"github.com/CommercialManagementSystem/back/pkg/cryptox"
-	"github.com/CommercialManagementSystem/back/pkg/logger"
 	"github.com/CommercialManagementSystem/back/pkg/warpper"
 	"github.com/google/wire"
 	"gorm.io/gorm"
@@ -19,49 +15,6 @@ import (
 // LoginModelSet LoginModel 注入 DI
 var LoginModelSet = wire.NewSet(wire.Struct(new(LoginModel), "*"))
 
-// 下面的部分用于通过手机号码或者 hrid 验证用户登录, 采用简单工厂模式
-type iVerify interface {
-	Verify(ctx context.Context, username string) (*[]entity.User, error)
-}
-
-type verifyByPhone struct {
-	UserDao *dao.UserDao
-}
-
-func (v *verifyByPhone) Verify(ctx context.Context, username string) (*[]entity.User, error) {
-	return v.UserDao.Query(ctx, dao.UserQueryParams{
-		Phone: username,
-	})
-}
-
-type verifyByHRID struct {
-	UserDao *dao.UserDao
-}
-
-func (v *verifyByHRID) Verify(ctx context.Context, username string) (*[]entity.User, error) {
-	return v.UserDao.Query(ctx, dao.UserQueryParams{
-		UID: username,
-	})
-}
-
-func verifyFactory(ctx context.Context, username string, userDao *dao.UserDao) (iVerify, error) {
-	if len(username) == 4 {
-		logger.WithContext(ctx).Infof("使用 hrid 登录 - %v", username)
-		return &verifyByHRID{
-			UserDao: userDao,
-		}, nil
-	}
-
-	if match, _ := regexp.MatchString("^1[3-9]\\d{9}", username); match {
-		logger.WithContext(ctx).Infof("使用电话号码登录 - %v", username)
-		return &verifyByPhone{
-			UserDao: userDao,
-		}, nil
-	}
-
-	return nil, warpper.ErrInvalidUserName
-}
-
 // LoginModel 处理登录的主要逻辑
 type LoginModel struct {
 	UserDao *dao.UserDao
@@ -69,12 +22,9 @@ type LoginModel struct {
 
 // Login 登录方法
 func (l *LoginModel) Login(ctx context.Context, username, password string) (*schema.LoginResBodySchema, error) {
-	verify, err := verifyFactory(ctx, username, l.UserDao)
-	if err != nil {
-		return nil, err
-	}
-
-	res, err := verify.Verify(ctx, username)
+	res, err := l.UserDao.Get(ctx, dao.UserQueryParams{
+		UID: username,
+	})
 	// 区分未找到错误
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, warpper.ErrInvalidUserName
@@ -89,8 +39,17 @@ func (l *LoginModel) Login(ctx context.Context, username, password string) (*sch
 		return nil, warpper.ErrInvalidPassword
 	}
 
+	token := ""
+	if config.C.JWT.Enable {
+		token, err = cryptox.GenerateToken(user.UID)
+		if err != nil {
+			return nil, warpper.ErrCanNotGenerateToken
+		}
+	}
+
 	return &schema.LoginResBodySchema{
 		UID:       user.UID,
 		Authority: user.Authority,
+		Token:     token,
 	}, nil
 }

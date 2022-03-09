@@ -9,6 +9,7 @@ var (
 	ErrInvalidUserName         = New400Response("无效的用户名")
 	ErrInvalidPassword         = New400Response("无效的密码")
 	ErrInvalidUser             = New400Response("无效的用户")
+	ErrCanNotGenerateToken     = New400Response("生成token失败")
 	ErrUserDisable             = New400Response("用户被禁用，请联系管理员")
 
 	ErrNoPerm          = NewResponse(401, 401, "无访问权限")

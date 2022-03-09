@@ -1,8 +1,6 @@
 package entity
 
-import (
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
 // Role 角色信息表
 type Role struct {

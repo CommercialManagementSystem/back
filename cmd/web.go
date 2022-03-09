@@ -17,9 +17,9 @@ func main() {
 	ctx := logger.NewTagContext(context.Background(), "__main__")
 
 	app := cli.NewApp()
-	app.Name = "insider"
+	app.Name = "commercial"
 	app.Version = VERSION
-	app.Usage = "QNXG insider"
+	app.Usage = "commercial back"
 
 	app.Flags = []cli.Flag{
 		&cli.StringFlag{

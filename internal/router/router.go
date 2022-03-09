@@ -11,7 +11,11 @@ var RouterSet = wire.NewSet(wire.Struct(new(Router), "*"))
 
 // Router 路由管理器
 type Router struct {
-	LoginAPI *controller.Login
+	LoginAPI           *controller.Login
+	UserAPI            *controller.UserController
+	ProductAPI         *controller.ProductController
+	ProductUserAPI     *controller.ProductUserController
+	ProductAppendixAPI *controller.AppendixController
 }
 
 // Register 注册路由

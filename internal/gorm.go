@@ -57,5 +57,8 @@ func NewDB() (*gorm.DB, error) {
 
 // AutoMigrate 自动映射数据表
 func AutoMigrate(db *gorm.DB) error {
-	return db.AutoMigrate(&entity.Role{}, &entity.User{})
+	return db.AutoMigrate(
+		&entity.Role{}, &entity.User{}, &entity.Product{},
+		&entity.ProductUser{}, &entity.Whitelist{}, &entity.Blacklist{},
+	)
 }

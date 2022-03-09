@@ -15,6 +15,7 @@ import (
 func BuildInjector() (*Injector, func(), error) {
 	wire.Build(
 		InitGorm,
+		InitOSS,
 		controller.ControllerSet,
 		model.ModelSet,
 		dao.DaoSet,
