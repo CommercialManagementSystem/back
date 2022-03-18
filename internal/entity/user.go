@@ -9,7 +9,7 @@ type User struct {
 	Authority int    `gorm:"type:int;default:0;not null"`
 
 	Name  string `gorm:"type:varchar(255);not null"`
-	Sex   int    `gorm:"type:tinyint;not null"`
+	Sex   int    `gorm:"type:int;not null"`
 	Phone string `gorm:"type:varchar(255);not null"`
 	Email string `gorm:"type:varchar(255);not null"`
 

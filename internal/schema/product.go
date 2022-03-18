@@ -13,7 +13,7 @@ type UpdateProductRequestBody struct {
 type BaseProductRequestBody struct {
 	Name         string `json:"name"`
 	ExpenseRatio string `json:"expense_ratio"`
-	CompanyID    int    `json:"company_id"`
+	Company      string `json:"company"`
 	Plan         string `json:"plan"`
 	Rule         string `json:"rule"`
 	Steps        string `json:"steps"`

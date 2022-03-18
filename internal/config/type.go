@@ -54,6 +54,11 @@ func (d *DBType) DSN() string {
 	)
 }
 
+func (d *DBType) PgDSN() string {
+	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai",
+		d.Host, d.User, d.Password, d.DBName, d.Port)
+}
+
 // LogType 日志配置类型定义
 type LogType struct {
 	Level  int8   `yaml:"Level"`

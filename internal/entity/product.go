@@ -4,14 +4,13 @@ import "gorm.io/gorm"
 
 type Product struct {
 	gorm.Model
-	Name         string  `gorm:"type:varchar(255);not null"`
-	ExpenseRatio float64 `gorm:"type:float;not null"`
+	Name         string `gorm:"type:varchar(255);not null"`
+	ExpenseRatio string `gorm:"type:varchar(255);not null"`
 
-	CompanyID uint `gorm:"type:unsigned int"`
-	Company   User `gorm:"foreignKey:CompanyID;references:ID"`
+	Company uint `gorm:"type:varchar(255);not null"`
 
-	Plan string `gorm:"type:longtext"`
-	Rule string `gorm:"type:longtext"`
+	Plan string `gorm:"type:text"`
+	Rule string `gorm:"type:text"`
 
-	Steps string `gorm:"type:longtext"`
+	Steps string `gorm:"type:text"`
 }

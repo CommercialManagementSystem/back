@@ -39,9 +39,9 @@ GORM:
 
 DB:
   # 连接地址
-  Host: 101.201.233.209
+  Host: 47.99.116.208
   # 连接端口
-  Port: 3306
+  Port: 5432
   # 用户名
   User: commercial
   # 密码
@@ -83,9 +83,9 @@ JWT:
 # TODO: 增加OSS配置
 OSS:
   CRC: true
-  Endpoint: Endpoint
-  AccessKeyId: AccessKeyId
-  AccessKeySecret: AccessKeySecret
+  Endpoint: https://oss-cn-beijing.aliyuncs.com
+  AccessKeyId: LTAI5tN2FRbFLpmvuRHC4TfA
+  AccessKeySecret: gUBa1ybjZqhIFuQ7gg9daz7TeKPV8k
 
 # TODO: 增加OCR配置
 OCR:

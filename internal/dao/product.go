@@ -36,12 +36,12 @@ func (p *ProductDao) Update(ctx context.Context, params *entity.Product) error {
 		columns["name"] = params.Name
 	}
 
-	if params.ExpenseRatio != 0.0 {
+	if params.ExpenseRatio != "" {
 		columns["expense_ratio"] = params.ExpenseRatio
 	}
 
-	if params.CompanyID != 0 {
-		columns["company_id"] = params.CompanyID
+	if params.Company != 0 {
+		columns["company"] = params.Company
 	}
 
 	if params.Plan != "" {

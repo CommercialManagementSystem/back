@@ -6,7 +6,7 @@ import (
 	"github.com/CommercialManagementSystem/back/internal/entity"
 
 	"github.com/CommercialManagementSystem/back/internal/config"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -33,7 +33,10 @@ func NewDB() (*gorm.DB, error) {
 	c := config.C.DB
 	cGorm := config.C.GORM
 
-	db, err := gorm.Open(mysql.Open(c.DSN()), &gorm.Config{})
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  c.PgDSN(),
+		PreferSimpleProtocol: true,
+	}), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
@@ -60,5 +63,6 @@ func AutoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&entity.Role{}, &entity.User{}, &entity.Product{},
 		&entity.ProductUser{}, &entity.Whitelist{}, &entity.Blacklist{},
+		&entity.ProductAppendix{},
 	)
 }

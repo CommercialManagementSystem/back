@@ -68,6 +68,7 @@ func BuildInjector() (*Injector, func(), error) {
 		AppendixModel: productAppendixModel,
 	}
 	routerRouter := &router.Router{
+		UserDao:            userDao,
 		LoginAPI:           login,
 		UserAPI:            userController,
 		ProductAPI:         productController,
